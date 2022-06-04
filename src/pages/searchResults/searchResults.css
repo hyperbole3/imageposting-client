@@ -1,0 +1,10 @@
+.searchResults {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.searchResultsRight {
+  flex: 3;
+  margin: 0 10px;
+}

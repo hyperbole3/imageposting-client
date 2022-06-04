@@ -1,0 +1,38 @@
+.feed {
+  flex: 3;
+}
+
+.feedWrapper {
+  padding: 20px;
+}
+
+.filterButtons {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.filterButton {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  margin-right: 20px;
+  background-color: white;
+}
+
+.filterButton:hover {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  margin-right: 20px;
+  background-color: #dddddd;
+}
+
+.filterButtonSelected {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 20px;
+  margin-right: 20px;
+  background-color: #bbbbbb;
+}
