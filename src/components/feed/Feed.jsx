@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import './feed.css';
 import Share from '../share/Share';
 import Post from '../post/Post';
-import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import { API } from '../../apiCalls';
 
 export default function Feed({username}) {
   const [posts, setPosts] = useState([]);
@@ -13,15 +13,15 @@ export default function Feed({username}) {
   const fetchPosts = useCallback(async () => {
     try {
       if (filter === "new") {
-        const res = await axios.get(`/posts/post/newest`);
+        const res = await API.get(`/posts/post/newest`);
         setPosts(res.data);
       } else if (filter === "top") {
-        const res = await axios.get(`/posts/post/top`);
+        const res = await API.get(`/posts/post/top`);
         setPosts(res.data);
       } else {
         const res = username
-        ? await axios.get(`/posts/post/profile/${username}`)
-        : await axios.get(`/posts/post/timeline/${user._id}`);
+        ? await API.get(`/posts/post/profile/${username}`)
+        : await API.get(`/posts/post/timeline/${user._id}`);
         setPosts(
           res.data.sort((p1, p2) => {
             return new Date(p2.createdAt) - new Date(p1.createdAt);

@@ -1,10 +1,10 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import './searchResults.css';
-import axios from 'axios';
 import Post from '../../components/post/Post';
 import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useLocation } from 'react-router-dom';
+import { API } from '../../apiCalls';
 
 export default function SearchResults() {
   const [results, setResults] = useState([]);
@@ -17,7 +17,7 @@ export default function SearchResults() {
   useEffect(() => {
     const query = getQuery();
     const doFetch = async () => {
-      const res = await axios.get(`/search/post?text=${query.get('text')}`);
+      const res = await API.get(`/search/post?text=${query.get('text')}`);
       setResults(res.data);
     };
     doFetch();

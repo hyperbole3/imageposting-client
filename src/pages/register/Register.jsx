@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useHistory } from 'react-router';
 import {Link} from 'react-router-dom';
 import './register.css';
-import axios from 'axios';
+import { API } from '../../apiCalls';
 
 export default function Register() {
   const username = useRef();
@@ -22,7 +22,7 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post("/auth/register", user);
+        await API.post("/auth/register", user);
         history.push("/login");
       } catch(err) {
         console.log(err);

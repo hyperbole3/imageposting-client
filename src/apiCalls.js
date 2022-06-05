@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const API_URL = process.env.API_URL;
+export const API = axios.create({ baseURL: API_URL });
+
+
 const refreshAuthInstance = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: API_URL,
   timeout: 1000,
   headers: {'Content-Type': 'application/json'}
 });
@@ -10,7 +14,7 @@ const refreshAuthInstance = axios.create({
 export const loginCall = async (userCredentials, dispatch) => {
   dispatch({type: "LOGIN_START"});
   try {
-    const res = await axios.post("auth/login", userCredentials);
+    const res = await API.post("auth/login", userCredentials);
     console.log(res);
     if (res.status === 200) {
       console.log(res.data);
@@ -30,7 +34,7 @@ export const autologinCall = async (dispatch, userData) => {
   console.log("autologinCall");
   setAuthToken(accessToken);
   try {
-    const res = await axios.get(`/users?username=${userData.username}`);
+    const res = await API.get(`/users?username=${userData.username}`);
     console.log(res);
     localStorage.setItem('user', JSON.stringify(res.data));
     dispatch({type: "LOGIN_SUCCESS", payload: res.data});
@@ -43,7 +47,7 @@ export const logoutCall = async (dispatch) => {
   console.log("logoutCall");
   const refreshToken = localStorage.getItem('refreshToken');
   try {
-    await axios.delete("auth/logout", {token: refreshToken});
+    await API.delete("auth/logout", {token: refreshToken});
   } catch(err) {
 
   }
@@ -53,10 +57,10 @@ export const logoutCall = async (dispatch) => {
 
 function setAuthToken(token) {
   console.log("setAuthToken");
-  axios.defaults.headers.common['Authorization'] = '';
-  delete axios.defaults.headers.common['Authorization'];
+  API.defaults.headers.common['Authorization'] = '';
+  delete API.defaults.headers.common['Authorization'];
   if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 }
 
@@ -94,17 +98,18 @@ function doRefreshToken(dispatch) {
 
 export function setResponseInterceptor(dispatch) {
   console.log("setResponseInterceptor");
-  axios.interceptors.response.use(
-    (response) => response, (error) => {
+  API.interceptors.response.use(
+    (response) => response,
+    (error) => {
       const status = error.response ? error.response.status : null;
       console.log("intercepted Error " + String(status) + String(error.response.data));
       if (status === 403 && error.response.data === 'token invalid') {
         return doRefreshToken(dispatch).then(_ => {
           console.log("Updating accessToken");
           error.config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('accessToken');
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('accessToken');
+          API.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('accessToken');
           error.config.baseURL = undefined;
-          return axios.request(error.config);
+          return API.request(error.config);
         });
       }
       return Promise.reject(error);

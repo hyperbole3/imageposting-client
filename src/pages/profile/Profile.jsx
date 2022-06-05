@@ -4,8 +4,8 @@ import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Feed from '../../components/feed/Feed';
 import Rightbar from '../../components/rightbar/Rightbar';
-import axios from 'axios';
 import {useParams} from 'react-router';
+import { API } from '../../apiCalls';
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -14,7 +14,7 @@ export default function Profile() {
 
   useEffect(()=>{
     const fetchUser = async () => {
-      const res = await axios.get(`/users?username=${username}`);
+      const res = await API.get(`/users?username=${username}`);
       setUser(res.data);
     };
     fetchUser();

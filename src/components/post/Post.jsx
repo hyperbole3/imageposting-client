@@ -1,10 +1,10 @@
 import {React, useState, useEffect, useContext} from 'react';
 import './post.css';
 import {MoreVert, ArrowDropUp} from '@material-ui/icons';
-import axios from 'axios';
 import * as timeago from 'timeago.js';
 import {Link} from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { API } from '../../apiCalls';
 
 export default function Post({post}) {
   const [like, setLike] = useState(post.likes.length);
@@ -19,7 +19,7 @@ export default function Post({post}) {
     if (!loggedUser) return;
     if (post.userId === loggedUser._id) return;
     try {
-      await axios.put(`/posts/post/${post._id}/like`, {userId: loggedUser._id});
+      await API.put(`/posts/post/${post._id}/like`, {userId: loggedUser._id});
     } catch(err) {
       console.log(err);
     }
@@ -35,7 +35,7 @@ export default function Post({post}) {
     if (!loggedUser) return;
     try {
       console.log(loggedUser._id);
-      await axios.delete("/posts/post/" + post._id, {data: {userId: loggedUser._id}});
+      await API.delete("/posts/post/" + post._id, {data: {userId: loggedUser._id}});
       window.location.reload();
     } catch(err) {
       console.log(err);
@@ -49,7 +49,7 @@ export default function Post({post}) {
 
   useEffect(()=>{
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await API.get(`/users?userId=${post.userId}`);
       setUser(res.data);
     };
     fetchUser();

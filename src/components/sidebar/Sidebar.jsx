@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import './sidebar.css';
 import OnlineFriend from '../onlineFriend/OnlineFriend';
 import { AuthContext } from '../../context/AuthContext';
-import axios from 'axios';
+import { API } from '../../apiCalls';
 
 export default function Sidebar() {
   const {user} = useContext(AuthContext);
@@ -12,7 +12,7 @@ export default function Sidebar() {
     const getFriends = async () => {
       if (!user) return;
       try {
-        const res = await axios.get(`/users/friends/${user._id}`);
+        const res = await API.get(`/users/friends/${user._id}`);
         setFriends(res.data);
       } catch(err) {
         console.log(err);

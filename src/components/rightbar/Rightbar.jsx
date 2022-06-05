@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './rightbar.css';
-import axios from 'axios';
 import {Link} from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { Add, Remove } from '@material-ui/icons';
+import { API } from '../../apiCalls';
 
 export default function Rightbar({user}) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -24,7 +24,7 @@ export default function Rightbar({user}) {
       if (!loggedUser) return;
       const getBirthdayFriends = async () => {
         try {
-          const res = await axios.get(`/users/friends/${loggedUser._id}`);
+          const res = await API.get(`/users/friends/${loggedUser._id}`);
           const loggedUserFriends = res.data;
           console.log(res.data);
           
@@ -63,7 +63,7 @@ export default function Rightbar({user}) {
       if (!user) return;
       const getUserFriends = async () => {
         try {
-          const res = await axios.get(`/users/friends/${user._id}`);
+          const res = await API.get(`/users/friends/${user._id}`);
           console.log(res.data);
           setUserFriends(res.data);
         } catch(err) {
@@ -76,10 +76,10 @@ export default function Rightbar({user}) {
     const handleFollow = async () => {
       try {
         if (followed) {
-          await axios.post("/users/"+user._id+"/unfollow", {userId: loggedUser._id});
+          await API.post("/users/"+user._id+"/unfollow", {userId: loggedUser._id});
           dispatch({type: "UNFOLLOW", payload: user._id});
         } else {
-          await axios.post("/users/"+user._id+"/follow", {userId: loggedUser._id});
+          await API.post("/users/"+user._id+"/follow", {userId: loggedUser._id});
           dispatch({type: "FOLLOW", payload: user._id});
         }
       } catch(err) {

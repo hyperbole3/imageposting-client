@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import './share.css';
 import { PermMedia, Label, Room, EmojiEmotions, Cancel } from '@material-ui/icons';
 import { AuthContext } from '../../context/AuthContext';
-import axios from 'axios';
+import { API } from '../../apiCalls';
 
 export default function Share() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -24,7 +24,7 @@ export default function Share() {
       data.append("file", file);
       data.append("name", fileName);
       try {
-        const res = await axios.post("/upload", data);
+        const res = await API.post("/upload", data);
         console.log(res.data.filename);
         newPost.img = res.data.filename;
       } catch(err) {
@@ -32,7 +32,7 @@ export default function Share() {
       }
     }
     try {
-      await axios.post("/posts/post", newPost);
+      await API.post("/posts/post", newPost);
       window.location.reload();
     } catch(err) {
       console.log(err);
