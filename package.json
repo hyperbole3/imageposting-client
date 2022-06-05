@@ -40,5 +40,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"https://cryptic-citadel-15183.herokuapp.com/api"
+  "proxy": "https://leatposting-server.herokuapp.com/api"
 }
