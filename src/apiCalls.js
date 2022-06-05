@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = process.env.API_URL;
+const API_URL = "https://leatposting-server.herokuapp.com/api"; //process.env.API_URL;
 export const API = axios.create({ baseURL: API_URL });
 
 
